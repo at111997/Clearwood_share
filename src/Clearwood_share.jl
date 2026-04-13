@@ -27,16 +27,15 @@ end
 
 # model loading
 
-function load_models()
-    path = joinpath(@__DIR__, "model_AT_08_09/parameters.jld2")
+function load_models(base_path::String=joinpath(@__DIR__, "model_AT_08_09"))
+    path = joinpath(base_path, "parameters.jld2")
     all_parameters = load(path)["parameters"]
     baseline_params = filter(p -> p["exclude_parameter_i"] == 0, all_parameters)
 
     models = map(baseline_params) do p
         k = p["k_fold"]
         prefix = p["savename_prefix"]
-        # path = "model_AT_08_09/$(prefix)_exclude_parameter_i=0_k_fold=$(k)_seed=$(p["seed"]).jld2"
-        path = joinpath(@__DIR__, "model_AT_08_09/$(prefix)_exclude_parameter_i=0_k_fold=$(k)_seed=$(p["seed"]).jld2")
+        path = joinpath(base_path, "$(prefix)_exclude_parameter_i=0_k_fold=$(k)_seed=$(p["seed"]).jld2")
         result = load(path)["result"]
         ds = p["ds"]
         model = setup_model(Val(get(p, "model_type", :A)), ds; rel_layer_size=4, exclude_parameter_i=0)
