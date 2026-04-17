@@ -1,5 +1,9 @@
+module Clearwood_share
+
 using Flux
 using JLD2
+
+export combi_model, make_input, DATA, load_models
 
 struct DATA
     x_raw::Vector{Vector{Float64}}
@@ -23,21 +27,26 @@ end
 
 # model loading
 
-all_parameters = load("model_AT_08_09/parameters.jld2")["parameters"]
-baseline_params = filter(p -> p["exclude_parameter_i"] == 0, all_parameters)
+function load_models(base_path::String=joinpath(@__DIR__, "model_AT_08_09"))
+    path = joinpath(base_path, "parameters.jld2")
+    all_parameters = load(path)["parameters"]
+    baseline_params = filter(p -> p["exclude_parameter_i"] == 0, all_parameters)
 
-models = map(baseline_params) do p
-    k = p["k_fold"]
-    prefix = p["savename_prefix"]
-    path = "model_AT_08_09/$(prefix)_exclude_parameter_i=0_k_fold=$(k)_seed=$(p["seed"]).jld2"
-    result = load(path)["result"]
-    ds = p["ds"]
-    model = setup_model(Val(get(p, "model_type", :A)), ds; rel_layer_size=4, exclude_parameter_i=0)
-    Flux.loadmodel!(model, result.model)
-    model
+    models = map(baseline_params) do p
+        k = p["k_fold"]
+        prefix = p["savename_prefix"]
+        path = joinpath(base_path, "$(prefix)_exclude_parameter_i=0_k_fold=$(k)_seed=$(p["seed"]).jld2")
+        result = load(path)["result"]
+        ds = p["ds"]
+        model = setup_model(Val(get(p, "model_type", :A)), ds; rel_layer_size=4, exclude_parameter_i=0)
+        Flux.loadmodel!(model, result.model)
+        model
+    end
+
+    return models
 end
 
-combi_model(x) = sum(m(x) for m in models) / length(models)
+combi_model(x, models) = sum(m(x) for m in models) / length(models)
 
 # input funciton 
 
@@ -94,15 +103,4 @@ function make_input(EW_τ, EW_αlumen, EW_χ, EW_θ,
             for i in 1:15]
 end
 
-
-# test
-
-x = make_input(
-    0.75, 1.0, 1.0, 150.0,   # EW cell geometry
-    0.65, 1.0, 1.0, 150.0,   # LW cell geometry
-    0.5,  0.8, 0.05,         # Clearwood density
-    0.17, 10.7,              # Ray properties
-    0.8,  12.0                 # Fibre properties
-)
-
-combi_model(x)
+end # module
