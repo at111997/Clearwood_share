@@ -1,4 +1,4 @@
-module Clearwood_share
+module Clearwood_stiffness_model
 
 using Flux
 using JLD2
@@ -47,6 +47,16 @@ function load_models(base_path::String=joinpath(@__DIR__, "model_AT_08_09"))
 end
 
 combi_model(x, models) = sum(m(x) for m in models) / length(models)
+
+# input loading
+
+function load_config(path::String)
+    if endswith(path, ".json")
+        return JSON3.read(read(path, String))
+    else
+        error("Unsupported file format. Please use .json")
+    end
+end
 
 # input funciton 
 
