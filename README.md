@@ -4,7 +4,7 @@ This repository contains a neural network model for clearwood unit cell analysis
 
 ## Project Structure
 * `model_AT_08_09/`: Contains the trained model data/weights.
-* `Clearwood_share.jl`: The main script to load the model and run simulations.
+* `Clearwood_stiffness_model.jl`: The main script to load the model and run simulations.
 * `Project.toml` & `Manifest.toml`: Julia environment configuration.
 
 ## Install
@@ -26,10 +26,10 @@ Pkg.add(path=".")
 
 ## Usage
 
-To use the model, run the `Clearwood_share.jl` script:
+To use the model, run the `Clearwood_stiffness_model.jl` script:
 
 ```julia
-using Clearwood_share
+using Clearwood_stiffness_model
 
 # Load the model
 models = load_model()
@@ -43,7 +43,19 @@ x = make_input(
 )
 # Run the model to get predictions
 res = combi_model(x, models)
+```
 
+or loading the parameters from a JSON file:
+
+```julia
+using Clearwood_stiffness_model
+
+# Load the model
+models = load_model()
+# Load parameters from JSON file
+x = make_input_from_json(path)
+# Run the model to get predictions
+res = combi_model(x, models)
 ```
 
 ## Input Parameters
@@ -79,6 +91,7 @@ Full details see: https://doi.org/10.21203/rs.3.rs-9223177/v1
 
 Typical Norway Spruce values
 
+```json
 {
     "EW_cell": [
         0.7,

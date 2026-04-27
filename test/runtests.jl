@@ -16,15 +16,7 @@ res_direct = combi_model(x_direct, models)
 
 # Input loading from config file
 path = joinpath(@__DIR__, "test_config.json")
-data = read(path, String)
-config = JSON3.read(data)
 
-x_config = make_input(
-    config.ew_cell...,
-    config.lw_cell...,
-    config.density...,
-    config.ray_props...,
-    config.fibre_props...
-)
+x_config = make_input_from_json(path)
 
 res_config = combi_model(x_config, models)
