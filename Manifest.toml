@@ -162,12 +162,6 @@ git-tree-sha1 = "34d9873079e4cb3d0c62926a225136824677073f"
 uuid = "55437552-ac27-4d47-9aa3-63184e8fd398"
 version = "1.0.0"
 
-[[deps.Clearwood_stiffness_model]]
-deps = ["Flux", "JLD2"]
-path = "."
-uuid = "7b045289-04ac-4a79-b2c3-efaeac56e17f"
-version = "0.1.0"
-
 [[deps.CommonSubexpressions]]
 deps = ["MacroTools"]
 git-tree-sha1 = "cda2cfaebb4be89c9084adaca7dd7333369715c5"

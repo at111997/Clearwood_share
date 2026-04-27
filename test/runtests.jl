@@ -15,7 +15,9 @@ x_direct = make_input(
 res_direct = combi_model(x_direct, models)
 
 # Input loading from config file
-config = JSON3.read(read("test/test_config.json", String))
+path = joinpath(@__DIR__, "test_config.json")
+data = read(path, String)
+config = JSON3.read(data)
 
 x_config = make_input(
     config.ew_cell...,
