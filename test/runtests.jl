@@ -1,4 +1,3 @@
-using JSON3
 using Clearwood_stiffness_model
 
 models = load_models()
