@@ -2,8 +2,9 @@ module Clearwood_stiffness_model
 
 using Flux
 using JLD2
+using JSON3
 
-export combi_model, make_input, DATA, load_models
+export combi_model, make_input, DATA, load_models, make_input_from_json
 
 struct DATA
     x_raw::Vector{Vector{Float64}}
@@ -111,6 +112,33 @@ function make_input(EW_τ, EW_αlumen, EW_χ, EW_θ,
 
     return [(raw[i] - PARAM_BOUNDS[i][2]) / (PARAM_BOUNDS[i][3] - PARAM_BOUNDS[i][2])
             for i in 1:15]
+end
+
+"""
+    make_input_from_json(file_path::String)
+
+Loads parameter values from a JSON config file, normalises them using `make_input`, and returns a vector ready for `combi_model`.
+The JSON file should have the following structure:
+```json
+{
+    "ew_cell": [EW_τ, EW_αlumen, EW_χ, EW_θ],
+    "lw_cell": [LW_τ, LW_αlumen, LW_χ, LW_θ],
+    "density": [ρEW, ρLW, fLW],
+    "ray_props": [fray, αray],
+    "fibre_props": [ϑratio, ϑEW]
+}
+```
+"""
+function make_input_from_json(file_path::String)
+
+    config = load_config(file_path)
+    return make_input(
+        config.ew_cell...,
+        config.lw_cell...,
+        config.density...,
+        config.ray_props...,
+        config.fibre_props...
+    )
 end
 
 end # module
