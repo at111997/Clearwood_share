@@ -32,7 +32,7 @@ To use the model, run the `Clearwood_stiffness_model.jl` script:
 using Clearwood_stiffness_model
 
 # Load the model
-models = load_model()
+models = load_models()
 # Generate the input data
 x = make_input(
     0.75, 1.0, 1.0, 150.0,   # EW cell geometry
@@ -51,7 +51,7 @@ or loading the parameters from a JSON file:
 using Clearwood_stiffness_model
 
 # Load the model
-models = load_model()
+models = load_models()
 # Load parameters from JSON file
 x = make_input_from_json(path)
 # Run the model to get predictions
