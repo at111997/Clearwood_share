@@ -87,7 +87,7 @@ The model expects a configuration input (or JSON file) defined by the following 
 * **EW to LW Microfibril Ratio:** The ratio (LW/EW) of MFA between the two phases (Typical range: $0.3$ – $1.2$).
 * **EW Microfibril Angle (MFA):** The orientation of cellulose microfibrils in the EW cell wall (Typical range: $8.0$ – $30.0$). 
 
-Full details see: https://doi.org/10.21203/rs.3.rs-9223177/v1
+Full details see: https://doi.org/10.1007/s00226-026-01789-0
 
 Typical Norway Spruce values
 
