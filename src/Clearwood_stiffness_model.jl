@@ -2,7 +2,7 @@ module Clearwood_stiffness_model
 
 using Flux
 using JLD2
-using JSON3
+using JSON
 
 export combi_model, make_input, DATA, load_models, make_input_from_json
 
@@ -53,7 +53,7 @@ combi_model(x, models) = sum(m(x) for m in models) / length(models)
 
 function load_config(path::String)
     if endswith(path, ".json")
-        return JSON3.read(read(path, String))
+        return JSON.parse(read(path, String))
     else
         error("Unsupported file format. Please use .json")
     end
